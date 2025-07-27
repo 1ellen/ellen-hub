@@ -1,5 +1,5 @@
 local ID = game.PlaceId
-local baseURL = "https://github.com/1ellen/ellen-hub/tree/main/"
+local baseURL = "https://raw.githubusercontent.com/1ellen/ellen-hub/refs/heads/main/"
 local Players = game:GetService("Players")
 local plr = Players.LocalPlayer
 
