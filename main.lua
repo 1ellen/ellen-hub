@@ -6,6 +6,8 @@ local plr = Players.LocalPlayer
 function GetGame()
     if ID == 109983668079237 then
         return "stealabrainrot.lua"
+    elseif ID == 95031866873150 then
+        return "limits.lua"
     else
         plr:Kick("Jogo sem suporte")
         return nil
