@@ -163,9 +163,11 @@ local ShowTool = false
 local ShowRole = false
 local ShowHighlight = false
 
+-- Objetos de ESP
 local ESPObjects = {}
 local HighlightObjects = {}
 
+-- Limpa ESPs criados
 local function clearESP()
 	for _, obj in pairs(ESPObjects) do
 		if obj and obj.Parent then
@@ -175,6 +177,7 @@ local function clearESP()
 	table.clear(ESPObjects)
 end
 
+-- Limpa Highlights
 local function clearHighlights()
 	for _, obj in pairs(HighlightObjects) do
 		if obj and obj.Parent then
@@ -184,11 +187,13 @@ local function clearHighlights()
 	table.clear(HighlightObjects)
 end
 
+-- Cria ESP visual
 local function createESPForCharacter(character, player)
 	local head = character:FindFirstChild("Head")
 	local humanoid = character:FindFirstChildOfClass("Humanoid")
 	if not head or not humanoid then return end
 
+	-- Remove ESP antigo se existir
 	for _, gui in ipairs(head:GetChildren()) do
 		if gui:IsA("BillboardGui") and gui.Name == "ESP_GUI" then
 			gui:Destroy()
@@ -289,6 +294,7 @@ local function createESPForCharacter(character, player)
 	table.insert(ESPObjects, billboard)
 end
 
+-- Cria destaque com Highlight
 local function createHighlight(character, player)
 	if not character then return end
 
@@ -307,13 +313,13 @@ local function createHighlight(character, player)
 
 	local function updateColor()
 		local role = player:GetAttribute("Role")
-		if role == "shooter" or role == "mafia" then
+		if role == "Shooter" or role == "Mafia" then
 			hl.FillColor = Color3.fromRGB(255, 0, 0)
 			hl.OutlineColor = Color3.fromRGB(255, 0, 0)
-		elseif role == "guardas" then
+		elseif role == "Guards" then
 			hl.FillColor = Color3.fromRGB(0, 0, 255)
 			hl.OutlineColor = Color3.fromRGB(0, 0, 255)
-		elseif role == "bystander" then
+		elseif role == "Bystander" then
 			hl.FillColor = Color3.fromRGB(255, 255, 255)
 			hl.OutlineColor = Color3.fromRGB(255, 255, 255)
 		else
@@ -341,6 +347,7 @@ local function createHighlight(character, player)
 	table.insert(HighlightObjects, hl)
 end
 
+-- Aplica ESP a um jogador
 local function applyToPlayer(plr)
 	if plr == Players.LocalPlayer then return end
 
@@ -363,6 +370,7 @@ local function applyToPlayer(plr)
 	end)
 end
 
+-- Aplica para todos os jogadores
 local function applyAll()
 	for _, plr in ipairs(Players:GetPlayers()) do
 		applyToPlayer(plr)
@@ -377,6 +385,7 @@ Players.PlayerAdded:Connect(function(plr)
 	end)
 end)
 
+-- Atualiza ESP
 local function refreshESP()
 	clearESP()
 	clearHighlights()
