@@ -26,7 +26,7 @@ local Window = WindUI:CreateWindow({
 local Tab_LocalPlayer = Window:Tab({ Title = "LocalPlayer", Icon = "panel-right", Locked = false })
 local Tab_GunMod = Window:Tab({ Title = "Gun Mod", Icon = "cog", Locked = true })
 local Tab_ESP = Window:Tab({ Title = "ESP", Icon = "monitor", Locked = false })
-local Tab_Map = Window:Tab({ Title = "Map", Icon = "map", Locked = false })
+local Tab_Map = Window:Tab({ Title = "Map", Icon = "map", Locked = true })
 Window:SelectTab(1)
 
 --// Serviços
@@ -159,7 +159,6 @@ local NoclipToggle = Tab_LocalPlayer:Toggle({
 
 local ShowName = false
 local ShowHP = false
-local ShowTool = false
 local ShowRole = false
 local ShowHighlight = false
 
@@ -238,20 +237,6 @@ local function createESPForCharacter(character, player)
 		y += 0.25
 	end
 
-	if ShowTool then
-		toolLabel = Instance.new("TextLabel")
-		toolLabel.Size = UDim2.new(1, 0, 0.25, 0)
-		toolLabel.Position = UDim2.new(0, 0, y, 0)
-		toolLabel.BackgroundTransparency = 1
-		toolLabel.TextColor3 = Color3.new(1, 1, 1)
-		toolLabel.TextStrokeTransparency = 0
-		toolLabel.TextScaled = true
-		toolLabel.Font = Enum.Font.RobotoMono
-		toolLabel.Text = "Tool: None"
-		toolLabel.Parent = billboard
-		y += 0.25
-	end
-
 	if ShowRole then
 		roleLabel = Instance.new("TextLabel")
 		roleLabel.Size = UDim2.new(1, 0, 0.25, 0)
@@ -284,11 +269,6 @@ local function createESPForCharacter(character, player)
 		if hpLabel then
 			hpLabel.Text = "HP: " .. math.floor(humanoid.Health)
 		end
-
-		if toolLabel then
-			local tool = character:FindFirstChildOfClass("Tool")
-			toolLabel.Text = "Tool: " .. (tool and tool.Name or "None")
-		end
 	end)
 
 	table.insert(ESPObjects, billboard)
@@ -313,36 +293,20 @@ local function createHighlight(character, player)
 
 	local function updateColor()
 		local role = player:GetAttribute("Role")
-		if role == "Shooter" or role == "Mafia" then
+		if role == "Shooter" or role == "Traitor" then
 			hl.FillColor = Color3.fromRGB(255, 0, 0)
 			hl.OutlineColor = Color3.fromRGB(255, 0, 0)
-		elseif role == "Guards" then
+		elseif role == "Guard" then
 			hl.FillColor = Color3.fromRGB(0, 0, 255)
 			hl.OutlineColor = Color3.fromRGB(0, 0, 255)
-		elseif role == "Bystander" then
+		elseif role == "Bystander" or role == "Unknown" then
 			hl.FillColor = Color3.fromRGB(255, 255, 255)
 			hl.OutlineColor = Color3.fromRGB(255, 255, 255)
-		else
-			hl.FillColor = Color3.fromRGB(150, 150, 150)
-			hl.OutlineColor = Color3.fromRGB(150, 150, 150)
 		end
 	end
 
 	player:GetAttributeChangedSignal("Role"):Connect(updateColor)
 	updateColor()
-
-	character.ChildAdded:Connect(function(child)
-		if child:IsA("Tool") then
-			updateColor()
-		end
-	end)
-
-	character.ChildRemoved:Connect(function(child)
-		if child:IsA("Tool") then
-			task.wait(0.1)
-			updateColor()
-		end
-	end)
 
 	table.insert(HighlightObjects, hl)
 end
@@ -352,7 +316,7 @@ local function applyToPlayer(plr)
 	if plr == Players.LocalPlayer then return end
 
 	local function applyToChar(char)
-		if ShowName or ShowHP or ShowTool or ShowRole then
+		if ShowName or ShowHP  or ShowRole then
 			createESPForCharacter(char, plr)
 		end
 		if ShowHighlight then
@@ -413,16 +377,6 @@ local HPToggle = Tab_ESP:Toggle({
 	end
 })
 
-local ToolEspToggle = Tab_ESP:Toggle({
-	Title = "Tool ESP",
-	Icon = "check",
-	Default = false,
-	Callback = function(state)
-		ShowTool = state
-		refreshESP()
-	end
-})
-
 local RoleEspToggle = Tab_ESP:Toggle({
 	Title = "Role ESP",
 	Icon = "check",
@@ -449,7 +403,7 @@ local LastPosition
 
 local SafePlaceButton = Tab_Map:Button({
     Title = "TP (Safe Place)",
-    Desc = "Teleporta para a base segura",
+    Desc = "",
     Locked = false,
     Callback = function()
         local character = game:GetService("Players").LocalPlayer.Character
@@ -464,7 +418,7 @@ local SafePlaceButton = Tab_Map:Button({
 
 local TpBackButton = Tab_Map:Button({
     Title = "TP Back",
-    Desc = "",
+    Desc = "last cframe: " .. LastPosition .. "" ,
     Locked = false,
     Callback = function()
         local character = game:GetService("Players").LocalPlayer.Character
