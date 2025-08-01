@@ -107,7 +107,7 @@ end
 
 Player.CharacterAdded:Connect(function(char)
 	if Noclipping then
-		task.wait(.5)
+		task.wait(.1)
 		toggleNoclipLoop(true)
 	end
 end)
@@ -126,23 +126,37 @@ local NoclipToggle = Tab_LocalPlayer:Toggle({
 
 --// WalkSpeed
 
---[[ local WalkspeedSlider = Tab_LocalPlayer:Slider({
-    Title = "Walkspeed",
+local CharacterClientScript = Player.Character:WaitForChild("SPH_Character").CharacterClient
+
+local NoclipToggle = Tab_LocalPlayer:Toggle({
+	Title = "Disable Patch",
+	Desc = "caso queira usar walkspeed/jumppower precisa ativar isso.",
+	Icon = "check",
+	Type = "Checkbox",
+	Default = false,
+	Callback = function(state)
+		CharacterClientScript.Enabled = state
+	end
+})
+
+
+local WalkspeedSlider = Tab_LocalPlayer:Slider({
+    Title = "WalkSpeed",
     Step = 1,
 
     Value = {
-        Min = 16,
-        Max = 100,
-        Default = 16,
+        Min = 9,
+        Max = 300,
+        Default = 9,
     },
     Callback = function(value)
-        Player.Character:WaitForChild("Humanoid").WalkSpeed = value
+		Player.Character:WaitForChild("Humanoid").WalkSpeed = value
     end
-}) 
+})
 
 --// Jump Power
  local JumppowerSlider = Tab_LocalPlayer:Slider({
-    Title = "Jump Power",
+    Title = "JumpPower",
     Step = 1,
 
     Value = {
@@ -153,7 +167,7 @@ local NoclipToggle = Tab_LocalPlayer:Toggle({
     Callback = function(value)
         Player.Character:WaitForChild("Humanoid").JumpPower = value
     end
-}) ]]
+})
 
 --// ESP: Code
 
