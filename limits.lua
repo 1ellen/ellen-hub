@@ -26,7 +26,7 @@ local Window = WindUI:CreateWindow({
 local Tab_LocalPlayer = Window:Tab({ Title = "LocalPlayer", Icon = "panel-right", Locked = false })
 local Tab_GunMod = Window:Tab({ Title = "Gun Mod", Icon = "cog", Locked = true })
 local Tab_ESP = Window:Tab({ Title = "ESP", Icon = "monitor", Locked = false })
-local Tab_Map = Window:Tab({ Title = "Map", Icon = "map", Locked = true })
+local Tab_Map = Window:Tab({ Title = "Map", Icon = "map", Locked = false })
 Window:SelectTab(1)
 
 --// Serviços
