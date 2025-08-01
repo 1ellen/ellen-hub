@@ -2,7 +2,7 @@ local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/rel
 local Window = WindUI:CreateWindow({
     Title = "Ellen Hub",
     Icon = "code",
-    Author = "1ellen",
+    Author = "1ellen | off limits v1.0.0",
     Folder = "EllenHub",
     Size = UDim2.fromOffset(620, 460),
     Transparent = true,
@@ -418,7 +418,7 @@ local SafePlaceButton = Tab_Map:Button({
 
 local TpBackButton = Tab_Map:Button({
     Title = "TP Back",
-    Desc = "last cframe: " .. LastPosition .. "" ,
+    Desc = "last cframe: " .. (LastPosition and tostring(LastPosition) or "None"),
     Locked = false,
     Callback = function()
         local character = game:GetService("Players").LocalPlayer.Character
