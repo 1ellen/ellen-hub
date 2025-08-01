@@ -401,6 +401,20 @@ local HighlightToggle = Tab_ESP:Toggle({
 local Baseplate = workspace:WaitForChild("Baseplate")
 local LastPosition
 
+
+local TpBackButton = Tab_Map:Button({
+    Title = "TP Back",
+    Desc = "last cframe: None",
+    Locked = false,
+    Callback = function()
+        local character = game:GetService("Players").LocalPlayer.Character
+        local rootPart = character and character:FindFirstChild("HumanoidRootPart")
+        if rootPart and LastPosition then
+            rootPart.CFrame = LastPosition
+        end
+    end
+})
+
 local SafePlaceButton = Tab_Map:Button({
     Title = "TP (Safe Place)",
     Desc = "",
@@ -411,20 +425,7 @@ local SafePlaceButton = Tab_Map:Button({
         if rootPart and Baseplate then
             LastPosition = rootPart.CFrame
             rootPart.CFrame = Baseplate.CFrame + Vector3.new(0, 5, 0)
-        end
-    end
-})
-
-
-local TpBackButton = Tab_Map:Button({
-    Title = "TP Back",
-    Desc = "last cframe: " .. (LastPosition and tostring(LastPosition) or "None"),
-    Locked = false,
-    Callback = function()
-        local character = game:GetService("Players").LocalPlayer.Character
-        local rootPart = character and character:FindFirstChild("HumanoidRootPart")
-        if rootPart and LastPosition then
-            rootPart.CFrame = LastPosition
+			TpBackButton:SetDesc("last cframe: " .. tostring(LastPosition))
         end
     end
 })
